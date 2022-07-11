@@ -1,11 +1,7 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0-buster-slim AS build
-WORKDIR /src
-COPY src/UnitTestingProcess/. .
-RUN dotnet restore "UnitTestingProcess.csproj"
-RUN dotnet build "UnitTestingProcess.csproj" -c Release
-RUN dotnet publish "UnitTestingProcess.csproj" -c Release -o /app/publish
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+COPY /src/UnitTestingProcess /app
+RUN dotnet publish -c Release -o /out /app/UnitTestingProcess.csproj
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0
-WORKDIR /app
-COPY --from=build /app/publish .
+FROM mcr.microsoft.com/dotnet/runtime:6.0 as base
+COPY --from=builder /out /app
 ENTRYPOINT ["dotnet", "/app/UnitTestingProcess.dll"]
