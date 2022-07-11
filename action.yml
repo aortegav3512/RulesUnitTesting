@@ -1,0 +1,6 @@
+# action.yml
+name: 'Rules-UnitTests'
+description: 'Run linting rules unit test'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
